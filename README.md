@@ -86,6 +86,6 @@ sudo /usr/bin/php /path-to-mautic/bin/console mautic:plugins:install
 
 ## License
 
-This project is licensed under the GPL-3.0 License.
+This project is licensed under the MIT License.
 
 ---
