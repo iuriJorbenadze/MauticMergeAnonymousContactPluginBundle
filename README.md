@@ -1,12 +1,13 @@
 # Mautic Merge Anonymous Contact Plugin
 
----
+
+
 
 ## Description
 
 The **Mautic Merge Anonymous Contact Plugin** improves Mautic's contact management by automatically merging anonymous contacts with identified contacts during the same browser session. This ensures accurate tracking continuity and consolidates contact data for better insights.
 
----
+
 
 ## Features
 
@@ -15,7 +16,7 @@ The **Mautic Merge Anonymous Contact Plugin** improves Mautic's contact manageme
 - Retains IP addresses and other tracking information from the anonymous contact.
 - Ensures accurate data consolidation and eliminates duplicate contact entries.
 
----
+
 
 ## Installation Instructions
 
