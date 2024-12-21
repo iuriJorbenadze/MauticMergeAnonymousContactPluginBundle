@@ -1,0 +1,28 @@
+{
+  "name": "lenonleite/lenonleite-m5-example-plugin",
+  "description": "This plugin is simple example of plugin to Mautic 5",
+  "type": "mautic-plugin",
+  "license": "GPL-3.0",
+  "authors": [
+      {
+          "name": "Lenon Leite",
+          "email": "lenonleite@gmail.com"
+      },
+      {
+          "name": "Iuri Jorbenadze",
+          "email": "jorbenadze2001@gmail.com"
+      }
+  ],
+  "keywords": [
+    "mautic",
+    "plugin",
+    "integration"
+  ],
+  "extra": {
+      "install-directory-name": "LenonLeiteM5ExamplePluginBundle",
+  },
+  "minimum-stability": "dev",
+  "require": {
+      "mautic/core-lib": "^5.0"
+  }
+}
