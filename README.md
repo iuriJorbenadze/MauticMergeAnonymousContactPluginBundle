@@ -54,7 +54,7 @@ sudo /usr/bin/php /path-to-mautic/bin/console mautic:plugins:install
 - Mautic creates an anonymous contact (e.g., Contact ID `100`) and tracks all page hits and activity under this ID.
 
 ### Email Interaction
-- An email is sent to the same individual (who is tracked anonymously but has an email address in Mautic's database).
+- An email is sent to the same individual (Either contact is imported with email address or manually created in Mautic - this contact has email address).
 - When this person clicks the link in the email (in the same browser session), Mautic identifies the individual as a known contact (e.g., Contact ID `200`) and assigns a new contact ID to the browser.
 
 ### Default Mautic Behavior
