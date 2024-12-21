@@ -1,13 +1,13 @@
 <?php
 
-namespace MauticPlugin\LenonLeiteM5ExamplePluginBundle\DependencyInjection;
+namespace MauticPlugin\MauticMergeAnonymousContactPluginBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-class LenonLeiteM5ExamplePluginExtension extends Extension
+class MauticMergeAnonymousContactPluginExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {

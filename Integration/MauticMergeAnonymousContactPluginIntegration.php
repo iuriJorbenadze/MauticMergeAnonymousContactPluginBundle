@@ -1,18 +1,17 @@
 <?php
-declare(strict_types=1);
 
-namespace MauticPlugin\LenonLeiteM5ExamplePluginBundle\Integration;
+namespace MauticPlugin\MauticMergeAnonymousContactPluginBundle\Integration;
 
 use Mautic\IntegrationsBundle\Integration\BasicIntegration;
 use Mautic\IntegrationsBundle\Integration\ConfigurationTrait;
 use Mautic\IntegrationsBundle\Integration\Interfaces\BasicInterface;
 
-class LenonLeiteM5ExamplePluginIntegration extends BasicIntegration implements BasicInterface
+class MauticMergeAnonymousContactPluginIntegration extends BasicIntegration implements BasicInterface
 {
     use ConfigurationTrait;
 
-    public const INTEGRATION_NAME = 'lenonleitem5exampleplugin';
-    public const DISPLAY_NAME     = 'Example of plugin to Mautic 5';
+    public const INTEGRATION_NAME = 'mauticmergeanonymouscontactplugin';
+    public const DISPLAY_NAME     = 'Mautic Merge Anonymous Contact Plugin';
 
     public function getName(): string
     {
@@ -26,6 +25,6 @@ class LenonLeiteM5ExamplePluginIntegration extends BasicIntegration implements B
 
     public function getIcon(): string
     {
-        return 'plugins/LenonLeiteM5ExamplePluginBundle/Assets/img/icon.png';
+        return 'plugins/MauticMergeAnonymousContactPluginBundle/Assets/img/icon.png';
     }
 }

@@ -1,28 +1,29 @@
 {
-  "name": "lenonleite/lenonleite-m5-example-plugin",
-  "description": "This plugin is simple example of plugin to Mautic 5",
+  "name": "mautic/mautic-merge-anonymous-contact-plugin",
+  "description": "A Mautic plugin for automatically merging anonymous contacts with identified contacts.",
   "type": "mautic-plugin",
   "license": "GPL-3.0",
   "authors": [
-      {
-          "name": "Lenon Leite",
-          "email": "lenonleite@gmail.com"
-      },
-      {
-          "name": "Iuri Jorbenadze",
-          "email": "jorbenadze2001@gmail.com"
-      }
+    {
+      "name": "Iuri Jorbenadze",
+      "email": "jorbenadze2001@gmail.com"
+    },
+    {
+      "name": "Lenon Leite",
+      "email": "lenonleite@gmail.com"
+    }
   ],
   "keywords": [
     "mautic",
     "plugin",
-    "integration"
+    "contact merge",
+    "anonymous contact"
   ],
   "extra": {
-      "install-directory-name": "LenonLeiteM5ExamplePluginBundle",
+    "install-directory-name": "MauticMergeAnonymousContactPluginBundle"
   },
   "minimum-stability": "dev",
   "require": {
-      "mautic/core-lib": "^5.0"
+    "mautic/core-lib": "^5.0"
   }
 }

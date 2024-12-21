@@ -15,6 +15,6 @@ return function (ContainerConfigurator $configurator): void {
     $excludes = [
     ];
 
-    $services->load('MauticPlugin\\LenonLeiteM5ExamplePluginBundle\\', '../')
+    $services->load('MauticPlugin\\MauticMergeAnonymousContactPluginBundle\\', '../')
         ->exclude('../{'.implode(',', array_merge(MauticCoreExtension::DEFAULT_EXCLUDES, $excludes)).'}');
 };

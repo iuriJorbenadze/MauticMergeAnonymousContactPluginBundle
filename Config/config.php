@@ -1,26 +1,26 @@
 <?php
 return [
-    'name'        => 'Lenon Leite',
-    'description' => 'This plugin is simple example of plugin to Mautic 5',
+    'name'        => 'Mautic Merge Anonymous Contact Plugin',
+    'description' => 'Automatically merges anonymous contacts with identified contacts in Mautic.',
     'version'     => '1.0.0',
-    'author'      => 'Lenon Leite',
+    'author'      => 'Your Name',
     'services'    => [
         'integrations' => [
-            'mautic.integration.lenonleitem5exampleplugin' => [
-                'class' => \MauticPlugin\LenonLeiteM5ExamplePluginBundle\Integration\LenonLeiteM5ExamplePluginIntegration::class,
+            'mautic.integration.mauticmergeanonymouscontactplugin' => [
+                'class' => \MauticPlugin\MauticMergeAnonymousContactPluginBundle\Integration\MauticMergeAnonymousContactPluginIntegration::class,
                 'tags'  => [
                     'mautic.integration',
                     'mautic.basic_integration',
                 ],
             ],
-            'mautic.integration.lenonleitem5exampleplugin.configuration' => [
-                'class' => \MauticPlugin\LenonLeiteM5ExamplePluginBundle\Integration\Support\ConfigSupport::class,
+            'mautic.integration.mauticmergeanonymouscontactplugin.configuration' => [
+                'class' => \MauticPlugin\MauticMergeAnonymousContactPluginBundle\Integration\Support\ConfigSupport::class,
                 'tags'  => [
                     'mautic.config_integration',
                 ],
             ],
-            'mautic.integration.lenonleitem5exampleplugin.config' => [
-                'class' => \MauticPlugin\LenonLeiteM5ExamplePluginBundle\Integration\Config::class,
+            'mautic.integration.mauticmergeanonymouscontactplugin.config' => [
+                'class' => \MauticPlugin\MauticMergeAnonymousContactPluginBundle\Integration\Config::class,
                 'tags'  => [
                     'mautic.integrations.helper',
                 ],

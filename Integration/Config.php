@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MauticPlugin\LenonLeiteM5ExamplePluginBundle\Integration;
+namespace MauticPlugin\MauticMergeAnonymousContactPluginBundle\Integration;
 
 use Mautic\IntegrationsBundle\Exception\IntegrationNotFoundException;
 use Mautic\IntegrationsBundle\Helper\IntegrationsHelper;
@@ -33,7 +33,7 @@ class Config
      */
     public function getIntegrationEntity(): Integration
     {
-        $integrationObject = $this->integrationsHelper->getIntegration(LenonLeiteM5ExamplePluginIntegration::INTEGRATION_NAME);
+        $integrationObject = $this->integrationsHelper->getIntegration(MauticMergeAnonymousContactPluginIntegration::INTEGRATION_NAME);
 
         return $integrationObject->getIntegrationConfiguration();
     }
