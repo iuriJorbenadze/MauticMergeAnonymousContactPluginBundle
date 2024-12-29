@@ -45,6 +45,8 @@ Alternatively, you can install the plugin via command line:
 sudo /usr/bin/php /path-to-mautic/bin/console mautic:plugins:install
 ```
 
+3. Go to plugins page, then click on installed plugin and enable the plugin by choosing 'Yes' option.
+
 ---
 
 ## User Flow Scenario
