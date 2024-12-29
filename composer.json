@@ -24,6 +24,8 @@
   },
   "minimum-stability": "dev",
   "require": {
+    "php": ">=8.0 <8.1",
+    "ext-zip": "^1.15",
     "mautic/core-lib": "^5.0"
   }
 }
