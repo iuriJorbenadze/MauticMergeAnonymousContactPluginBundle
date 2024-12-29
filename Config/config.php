@@ -3,7 +3,7 @@ return [
     'name'        => 'Mautic Merge Anonymous Contact Plugin',
     'description' => 'Automatically merges anonymous contacts with identified contacts in Mautic.',
     'version'     => '1.0.0',
-    'author'      => 'Your Name',
+    'author'      => 'Iuri Jorbenadze',
     'services'    => [
         'integrations' => [
             'mautic.integration.mauticmergeanonymouscontactplugin' => [

@@ -2,7 +2,7 @@
   "name": "mautic/mautic-merge-anonymous-contact-plugin",
   "description": "A Mautic plugin for automatically merging anonymous contacts with identified contacts.",
   "type": "mautic-plugin",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "authors": [
     {
       "name": "Iuri Jorbenadze",
