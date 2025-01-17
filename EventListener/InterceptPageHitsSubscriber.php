@@ -77,7 +77,7 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
         $sourceContact = $this->getContactById($sourceContactId);
 
         if ($targetContact && $sourceContact) {
-            // 1) Reassign page hits
+            // 1) Reassign page hits (existing logic, unchanged)
             $this->entityManager->createQueryBuilder()
                 ->update(\Mautic\PageBundle\Entity\Hit::class, 'ph')
                 ->set('ph.lead', ':newLead')
@@ -87,29 +87,56 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
                 ->getQuery()
                 ->execute();
 
-            // 2) Merge IPs
+            // 2) Merge IPs (existing logic, unchanged)
             foreach ($sourceContact->getIpAddresses() as $ipAddress) {
                 $targetContact->addIpAddress($ipAddress);
             }
 
-            // 3) Merge fields
-            $sourceFields = $sourceContact->getFields();
-            $targetFields = $targetContact->getFields();
-            foreach ($sourceFields as $key => $value) {
-                if (empty($targetFields[$key]) && !empty($value)) {
-                    $targetFields[$key] = $value;
-                }
-            }
-            $targetContact->setFields($targetFields);
+            // 3) Merge fields (new logic)
+            $this->mergeFields($sourceContact, $targetContact);
 
-            // 4) Persist the updated contact
+            // 4) Persist the updated contact (existing logic, unchanged)
             $this->entityManager->persist($targetContact);
 
-            // 5) Delete the old contact
+            // 5) Optionally delete the old contact (existing logic, unchanged)
             // $this->leadModel->deleteEntity($sourceContact);
 
-            // 6) Save changes
+            // 6) Save changes (existing logic, unchanged)
             $this->entityManager->flush();
         }
     }
+
+// Merge fields from source to target contact
+    private function mergeFields($sourceContact, $targetContact): void
+    {
+        // 1) Retrieve all fields (standard and custom) from the database
+        $fields = $this->entityManager
+            ->getRepository(\Mautic\LeadBundle\Entity\LeadField::class)
+            ->findAll();
+
+        // 2) Prepare the values to update
+        $values = [];
+        foreach ($fields as $field) {
+            $fieldAlias = $field->getAlias(); // Get the field alias (e.g., 'email', 'phone', or custom field alias)
+
+            // Fetch values from both source and target
+            $sourceValue = $sourceContact->getFieldValue($fieldAlias);
+            $targetValue = $targetContact->getFieldValue($fieldAlias);
+
+            // Only copy if the source has a value and the target doesn't
+            if (!empty($sourceValue) && empty($targetValue)) {
+                $values[$fieldAlias] = $sourceValue;
+            }
+        }
+
+        // 3) Use setFieldValues to update target contact fields
+        $this->leadModel->setFieldValues($targetContact, $values, false, false);
+
+        // Persist changes in the database (optional, depends on context)
+        $this->leadModel->saveEntity($targetContact);
+    }
+
+
+
+
 }
