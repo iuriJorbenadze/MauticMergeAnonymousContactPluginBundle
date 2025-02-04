@@ -78,34 +78,35 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
         $targetContact = $this->getContactById($targetContactId);
         $sourceContact = $this->getContactById($sourceContactId);
 
-        if ($targetContact && $sourceContact) {
-            // 1) Reassign page hits (existing logic, unchanged)
-            $this->entityManager->createQueryBuilder()
-                ->update(\Mautic\PageBundle\Entity\Hit::class, 'ph')
-                ->set('ph.lead', ':newLead')
-                ->where('ph.lead = :oldLead')
-                ->setParameter('newLead', $targetContact->getId())
-                ->setParameter('oldLead', $sourceContact->getId())
-                ->getQuery()
-                ->execute();
-
-            // 2) Merge IPs (existing logic, unchanged)
-            foreach ($sourceContact->getIpAddresses() as $ipAddress) {
-                $targetContact->addIpAddress($ipAddress);
-            }
-
-            // 3) Merge fields (new logic with fix)
-            $this->mergeFields($sourceContact, $targetContact);
-
-            // 4) Persist the updated contact (existing logic, unchanged)
-            $this->entityManager->persist($targetContact);
-
-            // 5) Optionally delete the old contact (existing logic, unchanged)
-            // $this->leadModel->deleteEntity($sourceContact);
-
-            // 6) Save changes (existing logic, unchanged)
-            $this->entityManager->flush();
+        // Prevent self-merge (do nothing if contacts are the same)
+        if (!$targetContact || !$sourceContact || $targetContact->getId() === $sourceContact->getId()) {
+            return;
         }
+
+        // 1) Reassign page hits (existing logic, unchanged)
+        $this->entityManager->createQueryBuilder()
+            ->update(\Mautic\PageBundle\Entity\Hit::class, 'ph')
+            ->set('ph.lead', ':newLead')
+            ->where('ph.lead = :oldLead')
+            ->setParameter('newLead', $targetContact->getId())
+            ->setParameter('oldLead', $sourceContact->getId())
+            ->getQuery()
+            ->execute();
+
+        // 2) Merge IPs (existing logic, unchanged)
+        foreach ($sourceContact->getIpAddresses() as $ipAddress) {
+            $targetContact->addIpAddress($ipAddress);
+        }
+
+        // 3) Merge fields (new logic with fix)
+        $this->mergeFields($sourceContact, $targetContact);
+
+        // 4) Persist the updated contact first before modifying the old one
+        $this->entityManager->persist($targetContact);
+        $this->entityManager->flush(); // Ensure merge is saved before clearing unique_id
+
+        // Only clear unique_id if merge actually happened
+        $this->clearOldContactUniqueId($sourceContact);
     }
 
     /**
@@ -141,7 +142,35 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
         // 4) Use setFieldValues to update target contact fields
         $this->leadModel->setFieldValues($targetContact, $values, false, false);
 
-        // Persist changes in the database (optional, depends on context)
+        // Persist changes in the database
         $this->leadModel->saveEntity($targetContact);
+    }
+
+    /**
+     * Clears the unique_id field for the old contact after merge at the database level.
+     * It is needed so we won't have duplicate unique_id's because there should only be 1 unique value
+     */
+    private function clearOldContactUniqueId($sourceContact): void
+    {
+        // 1) Ensure source contact exists
+        if (!$sourceContact) {
+            return; // Avoid null object errors
+        }
+
+        // Ensure this contact was actually merged (not itself)
+        $oldContactId = $sourceContact->getId();
+        if (!$oldContactId) {
+            return;
+        }
+
+        // 2) Execute a raw SQL query to clear unique_id only if merge happened
+        $sql = "UPDATE leads SET unique_id = NULL WHERE id = :contactId";
+
+        $this->entityManager->getConnection()->executeStatement($sql, [
+            'contactId' => $oldContactId
+        ]);
+
+        // 3) Ensure changes are committed to the database
+        $this->entityManager->flush();
     }
 }
