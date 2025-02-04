@@ -49,9 +49,11 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
         if ($cookies->has('mtc_id')) {
             $oldContactId = $cookies->get('mtc_id');
 
-            // If the cookie is about to be overridden (new lead ID differs from old ID)
-            if ($oldContactId !== $lead->getId()) {
-                // Merge the old contact into the new contact
+            // Check if the old contact actually exists before merging
+            $oldContact = $this->getContactById($oldContactId);
+
+            if ($oldContact && $oldContactId !== $lead->getId()) {
+                // Merge only if the old contact is valid and different from the target
                 $this->mergeContacts($lead->getId(), $oldContactId);
             }
         }
@@ -92,7 +94,7 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
                 $targetContact->addIpAddress($ipAddress);
             }
 
-            // 3) Merge fields (new logic)
+            // 3) Merge fields (new logic with fix)
             $this->mergeFields($sourceContact, $targetContact);
 
             // 4) Persist the updated contact (existing logic, unchanged)
@@ -106,7 +108,9 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
         }
     }
 
-// Merge fields from source to target contact
+    /**
+     * Merge fields from source to target contact.
+     */
     private function mergeFields($sourceContact, $targetContact): void
     {
         // 1) Retrieve all fields (standard and custom) from the database
@@ -129,14 +133,15 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
             }
         }
 
-        // 3) Use setFieldValues to update target contact fields
+        // 3) Add the old contact ID to the custom field 'old_contact_id' ONLY IF it's a different contact
+        if ($sourceContact->getId() !== $targetContact->getId()) {
+            $values['old_contact_id'] = $sourceContact->getId();
+        }
+
+        // 4) Use setFieldValues to update target contact fields
         $this->leadModel->setFieldValues($targetContact, $values, false, false);
 
         // Persist changes in the database (optional, depends on context)
         $this->leadModel->saveEntity($targetContact);
     }
-
-
-
-
 }
