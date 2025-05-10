@@ -134,10 +134,25 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
             }
         }
 
-        // 3) Add the old contact ID to the custom field 'old_contact_id' ONLY IF it's a different contact
-        if ($sourceContact->getId() !== $targetContact->getId()) {
-            $values['old_contact_id'] = $sourceContact->getId();
-        }
+        // // 3) Add the old contact ID to the custom field 'old_contact_id' ONLY IF it's a different contact
+        // if ($sourceContact->getId() !== $targetContact->getId()) {
+        //     $values['old_contact_id'] = $sourceContact->getId();
+        // }
+    
+    
+	    // 3) Append source contact ID to 'old_contact_id' field if it's not already included
+		if ($sourceContact->getId() !== $targetContact->getId()) {
+		    $existingOldIds = $targetContact->getFieldValue('old_contact_id') ?? '';
+		    $newOldId = $sourceContact->getId();
+		
+		    $oldIds = array_filter(array_map('trim', explode(',', $existingOldIds)));
+		    if (!in_array($newOldId, $oldIds, true)) {
+		        $oldIds[] = $newOldId;
+		    }
+		
+    		$values['old_contact_id'] = implode(',', $oldIds);
+		}
+
 
         // 4) Use setFieldValues to update target contact fields
         $this->leadModel->setFieldValues($targetContact, $values, false, false);
@@ -148,7 +163,6 @@ class InterceptPageHitsSubscriber implements EventSubscriberInterface
 
     /**
      * Clears the unique_id field for the old contact after merge at the database level.
-     * It is needed so we won't have duplicate unique_id's because there should only be 1 unique value
      */
     private function clearOldContactUniqueId($sourceContact): void
     {
